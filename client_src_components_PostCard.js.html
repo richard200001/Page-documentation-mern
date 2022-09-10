@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>client/src/components/PostCard.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client_src_api_posts.html">client/src/api/posts</a></li><li><a href="module-client_src_App.html">client/src/App</a><ul class='methods'><li data-type='method'><a href="module-client_src_App.html#~App">App</a></li></ul></li><li><a href="module-client_src_components_PostCard.html">client/src/components/PostCard</a><ul class='methods'><li data-type='method'><a href="module-client_src_components_PostCard.html#.PostCard">PostCard</a></li></ul></li><li><a href="module-client_src_context_postContext.html">client/src/context/postContext</a></li><li><a href="module-client_src_index.html">client/src/index</a></li><li><a href="module-client_src_pages_HomePage.html">client/src/pages/HomePage</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_HomePage.html#.HomePage">HomePage</a></li></ul></li><li><a href="module-client_src_pages_index.html">client/src/pages/index</a></li><li><a href="module-client_src_pages_NotFoundPage.html">client/src/pages/NotFoundPage</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_NotFoundPage.html#.NotFoundPage">NotFoundPage</a></li></ul></li><li><a href="module-client_src_pages_PostForm.html">client/src/pages/PostForm</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_PostForm.html#.PostForm">PostForm</a></li></ul></li><li><a href="module-server_app.html">server/app</a></li><li><a href="module-server_cloudinary.html">server/cloudinary</a></li><li><a href="module-server_config.html">server/config</a></li><li><a href="module-server_db.html">server/db</a></li><li><a href="module-server_index.html">server/index</a></li><li><a href="module-server_MyPostSchema.html">server/MyPostSchema</a></li><li><a href="module-server_postControllers.html">server/postControllers</a></li><li><a href="module-server_routes.html">server/routes</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-first-tutorial.html">Get Started</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">client/src/components/PostCard.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Regresa al tutorial {@tutorial first-tutorial}
+ * @module client/src/components/PostCard
+ */
+import React from "react"
+import toast from 'react-hot-toast'//envía notificaciones
+import { usePost } from "../context/postContext"
+import { useNavigate } from "react-router-dom"
+/**
+ * Eliminando tarjeta
+ * @param {Object} param0 
+ * @returns {Object}
+ */
+export function PostCard({post}){
+
+    const {deletePost} = usePost()
+    const navigate = useNavigate()
+    
+
+    const hadleDelete = (id) => {
+        toast((t) => (
+            &lt;div>
+                &lt;p className="text-white">Do you want to delelete&lt;strong>{id}&lt;/strong>?&lt;/p>
+                &lt;div>
+                    &lt;button className="bg-red-500 hover:bg-red-400 px-3 py-2 text-sm text-white rounded-sm mx-2" onClick={() => {
+                        deletePost(id)
+                        toast.dismiss(t.id)
+                        }
+                        }>Delete&lt;/button>
+
+                    &lt;button className="bg-slate-400 hover:bg-slate-500 px-3 py-2 text-white rounded-sm mx-2" onClick={() => toast.dismiss(t.id)}>Cancel&lt;/button>
+                &lt;/div>
+            &lt;/div>
+        ),
+        {
+          style: {
+            background: "#202020"
+          }
+        }
+        )
+    }
+    return (
+        &lt;div className="bg-zinc-800 text-white rounded-lg shadow-md shadow-black hover:bg-zinc-700 hover:cursor-pointer"
+        onClick={() => navigate(`/posts/${post._id}`)}
+        >
+           &lt;div className="px-4 py-7">
+                &lt;div className="flex justify-between">
+                    &lt;h3 className="font-bold text-xl mb-2">{post.title}&lt;/h3>
+                    &lt;button className="bg-red-500 hover:bg-red-400 px-3 py-2 text-sm text-white rounded-sm mx-2" onClick={(e) => { e.stopPropagation(); hadleDelete(post._id)}
+                }>Delete&lt;/button>
+                &lt;/div>
+                &lt;p>{post.description}&lt;/p>
+                &lt;/div>
+                
+                {post.image &amp;&amp; &lt;img src={post.image.url} className="w-full object-cover"/>}
+           
+        &lt;/div>
+        
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Sep 09 2022 20:14:23 GMT-0500 (hora de verano central) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

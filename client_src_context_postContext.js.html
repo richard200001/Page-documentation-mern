@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>client/src/context/postContext.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client_src_api_posts.html">client/src/api/posts</a></li><li><a href="module-client_src_App.html">client/src/App</a><ul class='methods'><li data-type='method'><a href="module-client_src_App.html#~App">App</a></li></ul></li><li><a href="module-client_src_components_PostCard.html">client/src/components/PostCard</a><ul class='methods'><li data-type='method'><a href="module-client_src_components_PostCard.html#.PostCard">PostCard</a></li></ul></li><li><a href="module-client_src_context_postContext.html">client/src/context/postContext</a></li><li><a href="module-client_src_index.html">client/src/index</a></li><li><a href="module-client_src_pages_HomePage.html">client/src/pages/HomePage</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_HomePage.html#.HomePage">HomePage</a></li></ul></li><li><a href="module-client_src_pages_index.html">client/src/pages/index</a></li><li><a href="module-client_src_pages_NotFoundPage.html">client/src/pages/NotFoundPage</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_NotFoundPage.html#.NotFoundPage">NotFoundPage</a></li></ul></li><li><a href="module-client_src_pages_PostForm.html">client/src/pages/PostForm</a><ul class='methods'><li data-type='method'><a href="module-client_src_pages_PostForm.html#.PostForm">PostForm</a></li></ul></li><li><a href="module-server_app.html">server/app</a></li><li><a href="module-server_cloudinary.html">server/cloudinary</a></li><li><a href="module-server_config.html">server/config</a></li><li><a href="module-server_db.html">server/db</a></li><li><a href="module-server_index.html">server/index</a></li><li><a href="module-server_MyPostSchema.html">server/MyPostSchema</a></li><li><a href="module-server_postControllers.html">server/postControllers</a></li><li><a href="module-server_routes.html">server/routes</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-first-tutorial.html">Get Started</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">client/src/context/postContext.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Regresa al tutorial {@tutorial first-tutorial}
+ * @module client/src/context/postContext
+ */
+import { Axios } from 'axios'
+import React from 'react'
+import {useState, createContext, useContext, useEffect} from 'react'
+import {createPostRequest, deletePostRequest, getPostReques, getPostRequest, updatePostRequest} from '../api/posts'
+/**
+ * la forma de pasar datos que pueden considerarse globales a un árbol de componentes 
+ * @type {React.Context}
+ */
+const postContext = createContext()
+
+/**
+ * retorno el contexto
+ * @returns {context}
+ */
+export const usePost = () => {
+    const context = useContext(postContext)
+    return context
+}
+
+/**
+ * permite que los componentes que lo consumen se suscriban a los cambios del contexto.
+ * @param {*} param0 
+ * @returns {Object}
+ */
+export const PostProvider = ({children}) => {
+    
+    const [posts, setPosts] = useState([])
+    const getPosts = async() => {
+       const res = await getPostRequest()
+      
+       setPosts(res.data)
+    }
+
+    /**
+     * 
+     * @param {Object} post 
+     */
+    const createPost = async (post) => {
+        try {
+            //console.log({postcontext: post})
+            const res = await createPostRequest(post)
+            //hago una copia de post y le añado la nueva información
+            setPosts([...posts, res.data])
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+    /**
+     * 
+     * @param {number} id 
+     */
+    const deletePost = async (id) => {
+        const res = await deletePostRequest(id);
+        if(res.status===204){
+            setPosts(posts.filter((post) => post._id !== id))
+        }
+       
+    }
+    /**
+     * 
+     * @param {number} id 
+     * @returns {Promise}
+     */
+    const getPost = async (id) => {
+       
+          const res = await getPostReques(id);
+          return res.data
+       
+      };
+    /**
+     * 
+     * @param {number} id 
+     * @param {Object} post 
+     */
+    const updatePost = async (id, post) => {
+        const res = await updatePostRequest(id,post)
+        setPosts(posts.map((post) => (post._id === id ? res.data : post)));
+    }
+
+     //con el useEffect le digo que cuando cargue el componente, ejecute el getPosts
+    useEffect(() => {
+        getPosts()
+    },[]);
+    return &lt;postContext.Provider value={{
+        posts,
+        getPosts,
+        createPost,
+        deletePost,
+        getPost,
+        updatePost
+    }}>
+     {children}
+    &lt;/postContext.Provider>
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Sep 09 2022 20:14:23 GMT-0500 (hora de verano central) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
